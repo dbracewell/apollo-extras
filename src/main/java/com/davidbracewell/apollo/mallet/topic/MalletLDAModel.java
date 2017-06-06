@@ -26,6 +26,7 @@ import java.util.TreeSet;
  * @author David B. Bracewell
  */
 public class MalletLDAModel extends TopicModel {
+   private static final long serialVersionUID = 1L;
    /**
     * The Topic model.
     */

@@ -23,6 +23,7 @@ import java.util.Arrays;
  * @author David B. Bracewell
  */
 public class MalletLDALearner extends Clusterer<MalletLDAModel> {
+   private static final long serialVersionUID = 1L;
    @Getter
    @Setter
    private int K = 100;

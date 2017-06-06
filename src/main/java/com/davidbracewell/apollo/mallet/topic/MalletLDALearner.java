@@ -26,6 +26,15 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
    @Getter
    @Setter
    private int K = 100;
+   @Getter
+   @Setter
+   private int maxIterations = 2000;
+   @Getter
+   @Setter
+   private int burnIn = 500;
+   @Getter
+   @Setter
+   private int optimizationInterval = 100;
 
 
    @Override
@@ -41,10 +50,10 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
                .forEach(i -> trainingData.addThruPipe(new Instance(i, "", null, null)));
       apolloModel.topicModel = new ParallelTopicModel(K);
       apolloModel.topicModel.addInstances(trainingData);
-      apolloModel.topicModel.setNumIterations(2000);
+      apolloModel.topicModel.setNumIterations(maxIterations);
       apolloModel.topicModel.setNumThreads(SystemInfo.NUMBER_OF_PROCESSORS - 1);
-      apolloModel.topicModel.setBurninPeriod(400);
-      apolloModel.topicModel.setOptimizeInterval(100);
+      apolloModel.topicModel.setBurninPeriod(burnIn);
+      apolloModel.topicModel.setOptimizeInterval(optimizationInterval);
       try {
          apolloModel.topicModel.estimate();
       } catch (IOException e) {

@@ -35,10 +35,7 @@ public class MalletLDAModel extends TopicModel {
     * The Pipes.
     */
    SerialPipes pipes;
-   /**
-    * The Inferencer.
-    */
-   transient TopicInferencer inferencer;
+   private transient TopicInferencer inferencer;
 
    /**
     * Instantiates a new Mallet lda model.

@@ -48,7 +48,8 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
                                                         new TokenSequence2FeatureSequence()));
       InstanceList trainingData = new InstanceList(apolloModel.pipes);
       instances.filter(i -> i.size() > 0)
-               .forEach(i -> trainingData.addThruPipe(new Instance(i, "", null, null)));
+               .forEach(
+                  i -> trainingData.addThruPipe(new Instance(i, i.getLabel() == null ? "" : i.getLabel(), null, null)));
       apolloModel.topicModel = new ParallelTopicModel(K);
       apolloModel.topicModel.addInstances(trainingData);
       apolloModel.topicModel.setNumIterations(maxIterations);

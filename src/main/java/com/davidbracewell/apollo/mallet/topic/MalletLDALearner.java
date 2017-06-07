@@ -56,6 +56,7 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
       apolloModel.topicModel.setNumThreads(SystemInfo.NUMBER_OF_PROCESSORS - 1);
       apolloModel.topicModel.setBurninPeriod(burnIn);
       apolloModel.topicModel.setOptimizeInterval(optimizationInterval);
+      apolloModel.topicModel.setSymmetricAlpha(false);
       try {
          apolloModel.topicModel.estimate();
       } catch (IOException e) {

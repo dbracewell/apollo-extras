@@ -16,7 +16,7 @@ public class C45Learner extends MalletClassifierLearner {
    @Override
    protected Classifier trainInstanceList(InstanceList instances, Pipe pipe, PreprocessorList<Instance> preprocessors) {
       C45Trainer trainer = new C45Trainer();
-      C45 model = new C45(instances.getTargetAlphabet(), instances.getDataAlphabet(), preprocessors);
+      MalletClassifier model = new MalletClassifier(instances.getTargetAlphabet(), instances.getDataAlphabet(), preprocessors);
       model.model = trainer.train(instances);
       return model;
    }

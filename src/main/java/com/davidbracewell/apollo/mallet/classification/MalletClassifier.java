@@ -9,13 +9,21 @@ import com.davidbracewell.apollo.ml.EncoderPair;
 import com.davidbracewell.apollo.ml.Instance;
 import com.davidbracewell.apollo.ml.classification.Classification;
 import com.davidbracewell.apollo.ml.classification.Classifier;
+import com.davidbracewell.apollo.ml.classification.ClassifierEvaluation;
+import com.davidbracewell.apollo.ml.classification.ClassifierLearner;
+import com.davidbracewell.apollo.ml.data.Dataset;
 import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
+import com.davidbracewell.collection.map.Maps;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author David B. Bracewell
  */
-public abstract class MalletClassifier extends Classifier {
+public class MalletClassifier extends Classifier {
    private static final long serialVersionUID = 1L;
+   cc.mallet.classify.Classifier model;
 
    /**
     * Instantiates a new Classifier.
@@ -31,7 +39,6 @@ public abstract class MalletClassifier extends Classifier {
 
    @Override
    public Classification classify(Vector vector) {
-      cc.mallet.classify.Classifier model = getClassifier();
       Labeling labeling = model.classify(model.getInstancePipe()
                                               .instanceFrom(new cc.mallet.types.Instance(vector, "", null, null)))
                                .getLabeling();
@@ -42,5 +49,30 @@ public abstract class MalletClassifier extends Classifier {
       return createResult(result);
    }
 
-   protected abstract cc.mallet.classify.Classifier getClassifier();
+
+   public static void main(String[] args) {
+//      Resource url = Resources.from(
+//         "https://raw.githubusercontent.com/sjwhitworth/golearn/master/examples/datasets/iris_headers.csv");
+//      DenseCSVDataSource dataSource = new DenseCSVDataSource(url, true);
+//      dataSource.setLabelName("Species");
+      Dataset<Instance> dataset = Dataset.classification()
+//                                         .source(dataSource)
+                                         .source(Arrays.asList(
+                                            Instance.create(Maps.map("love", 1.0, "hate", 0.0, "wife", 1.0), "Married"),
+                                            Instance.create(Maps.map("love", 1.0, "hate", 0.0, "wife", 1.0), "Married"),
+                                            Instance.create(Maps.map("love", 1.0, "hate", 0.0, "wife", 1.0), "Married"),
+                                            Instance.create(Maps.map("love", 0.0, "hate", 1.0, "girlfriend", 1.0),
+                                                            "NotMarried"),
+                                            Instance.create(Maps.map("love", 0.0, "hate", 1.0, "girlfriend", 1.0),
+                                                            "NotMarried"),
+                                            Instance.create(Maps.map("love", 0.0, "hate", 1.0, "wife", 1.0), "Married")
+                                                              ))
+                                         .shuffle(new Random(1234));
+
+      ClassifierLearner learner = new AdaBoostLearner();
+      ClassifierEvaluation eval = new ClassifierEvaluation();
+      eval.evaluate(learner.train(dataset), dataset);
+      eval.output(System.out);
+   }
+
 }// END OF MalletClassifier

@@ -1,6 +1,7 @@
 package com.davidbracewell.apollo.mallet.classification;
 
-import cc.mallet.classify.NaiveBayesTrainer;
+import cc.mallet.classify.AdaBoostTrainer;
+import cc.mallet.classify.DecisionTreeTrainer;
 import cc.mallet.pipe.Pipe;
 import cc.mallet.types.InstanceList;
 import com.davidbracewell.apollo.ml.Instance;
@@ -10,13 +11,12 @@ import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
 /**
  * @author David B. Bracewell
  */
-public class NaiveBayesLearner extends MalletClassifierLearner {
-   private static final long serialVersionUID = 1L;
+public class AdaBoostLearner extends MalletClassifierLearner {
    @Override
    protected Classifier trainInstanceList(InstanceList instances, Pipe pipe, PreprocessorList<Instance> preprocessors) {
-      MalletClassifier nb = new MalletClassifier(instances.getTargetAlphabet(), instances.getDataAlphabet(), preprocessors);
-      NaiveBayesTrainer trainer = new NaiveBayesTrainer();
-      nb.model = trainer.train(instances);
-      return nb;
+      MalletClassifier classifier = new MalletClassifier(instances.getTargetAlphabet(), instances.getDataAlphabet(), preprocessors);
+      AdaBoostTrainer trainer = new AdaBoostTrainer(new DecisionTreeTrainer(),10);
+      classifier.model = trainer.train(instances);
+      return classifier;
    }
-}// END OF NaiveBayesLearner
+}// END OF AdaBoostLearner

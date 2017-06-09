@@ -1,11 +1,7 @@
 package com.davidbracewell.apollo.mallet.classification;
 
 import cc.mallet.classify.C45Trainer;
-import cc.mallet.pipe.Pipe;
-import cc.mallet.types.InstanceList;
-import com.davidbracewell.apollo.ml.Instance;
-import com.davidbracewell.apollo.ml.classification.Classifier;
-import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
+import cc.mallet.classify.ClassifierTrainer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,16 +24,13 @@ public class C45Learner extends MalletClassifierLearner {
    private int minInstances = 2;
 
    @Override
-   protected Classifier trainInstanceList(InstanceList instances, Pipe pipe, PreprocessorList<Instance> preprocessors) {
+   protected ClassifierTrainer<?> getTrainer() {
       C45Trainer trainer = new C45Trainer();
       trainer.setDepthLimited(depthLimited);
       trainer.setDoPruning(doPruning);
       trainer.setMaxDepth(maxDepth);
       trainer.setMinNumInsts(minInstances);
-      MalletClassifier model = new MalletClassifier(instances.getTargetAlphabet(),
-                                                    instances.getDataAlphabet(),
-                                                    preprocessors);
-      model.model = trainer.train(instances);
-      return model;
+      return trainer;
    }
+
 }// END OF C45Learner

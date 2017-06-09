@@ -1,5 +1,6 @@
 package com.davidbracewell.apollo.mallet.classification;
 
+import cc.mallet.classify.ClassifierTrainer;
 import cc.mallet.pipe.*;
 import cc.mallet.types.InstanceList;
 import com.davidbracewell.apollo.mallet.VectorToTokensPipe;
@@ -7,7 +8,6 @@ import com.davidbracewell.apollo.ml.Instance;
 import com.davidbracewell.apollo.ml.classification.Classifier;
 import com.davidbracewell.apollo.ml.classification.ClassifierLearner;
 import com.davidbracewell.apollo.ml.data.Dataset;
-import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
 
 import java.util.Arrays;
 
@@ -24,13 +24,15 @@ public abstract class MalletClassifierLearner extends ClassifierLearner {
                                            new FeatureSequence2FeatureVector()));
    }
 
+   protected abstract ClassifierTrainer<?> getTrainer();
+
    @Override
    public void reset() {
 
    }
 
    @Override
-   protected Classifier trainImpl(Dataset<Instance> dataset) {
+   protected final Classifier trainImpl(Dataset<Instance> dataset) {
       Pipe pipe = createPipe();
       InstanceList trainingData = new InstanceList(pipe);
       dataset.asFeatureVectors()
@@ -38,9 +40,13 @@ public abstract class MalletClassifierLearner extends ClassifierLearner {
                 String lbl = dataset.getEncoderPair().decodeLabel(i.getLabel()).toString();
                 trainingData.addThruPipe(new cc.mallet.types.Instance(i, lbl, null, null));
              });
-      return trainInstanceList(trainingData, pipe, dataset.getPreprocessors());
+      ClassifierTrainer<?> trainer = getTrainer();
+      MalletClassifier model = new MalletClassifier(trainingData.getTargetAlphabet(),
+                                                    trainingData.getDataAlphabet(),
+                                                    dataset.getPreprocessors());
+      model.model = trainer.train(trainingData);
+      return model;
    }
 
-   protected abstract Classifier trainInstanceList(InstanceList instances, Pipe pipe, PreprocessorList<Instance> preprocessors);
 
 }// END OF MalletClassifierLearner

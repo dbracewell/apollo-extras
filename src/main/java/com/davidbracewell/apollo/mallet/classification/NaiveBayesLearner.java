@@ -1,12 +1,8 @@
 package com.davidbracewell.apollo.mallet.classification;
 
+import cc.mallet.classify.ClassifierTrainer;
 import cc.mallet.classify.NaiveBayesEMTrainer;
 import cc.mallet.classify.NaiveBayesTrainer;
-import cc.mallet.pipe.Pipe;
-import cc.mallet.types.InstanceList;
-import com.davidbracewell.apollo.ml.Instance;
-import com.davidbracewell.apollo.ml.classification.Classifier;
-import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,21 +18,18 @@ public class NaiveBayesLearner extends MalletClassifierLearner {
    @Setter
    private double unLabeledWeight = 0;
 
-
    @Override
-   protected Classifier trainInstanceList(InstanceList instances, Pipe pipe, PreprocessorList<Instance> preprocessors) {
-      MalletClassifier nb = new MalletClassifier(instances.getTargetAlphabet(), instances.getDataAlphabet(),
-                                                 preprocessors);
+   protected ClassifierTrainer<?> getTrainer() {
       if (unLabeledWeight > 0) {
          NaiveBayesEMTrainer trainer = new NaiveBayesEMTrainer();
          trainer.setUnlabeledDataWeight(unLabeledWeight);
          trainer.setDocLengthNormalization(docLengthNormalization);
-         nb.model = trainer.train(instances);
+         return trainer;
       } else {
          NaiveBayesTrainer trainer = new NaiveBayesTrainer();
          trainer.setDocLengthNormalization(docLengthNormalization);
-         nb.model = trainer.train(instances);
+         return trainer;
       }
-      return nb;
    }
+
 }// END OF NaiveBayesLearner

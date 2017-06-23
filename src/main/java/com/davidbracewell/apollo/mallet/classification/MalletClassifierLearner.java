@@ -27,7 +27,7 @@ public abstract class MalletClassifierLearner extends ClassifierLearner {
    protected abstract ClassifierTrainer<?> getTrainer();
 
    @Override
-   public void reset() {
+   protected void resetLearnerParameters() {
 
    }
 
@@ -35,15 +35,13 @@ public abstract class MalletClassifierLearner extends ClassifierLearner {
    protected final Classifier trainImpl(Dataset<Instance> dataset) {
       Pipe pipe = createPipe();
       InstanceList trainingData = new InstanceList(pipe);
-      dataset.asFeatureVectors()
+      dataset.asVectors()
              .forEach(i -> {
                 String lbl = dataset.getEncoderPair().decodeLabel(i.getLabel()).toString();
                 trainingData.addThruPipe(new cc.mallet.types.Instance(i, lbl, null, null));
              });
       ClassifierTrainer<?> trainer = getTrainer();
-      MalletClassifier model = new MalletClassifier(trainingData.getTargetAlphabet(),
-                                                    trainingData.getDataAlphabet(),
-                                                    dataset.getPreprocessors());
+      MalletClassifier model = new MalletClassifier(this);
       model.model = trainer.train(trainingData);
       return model;
    }

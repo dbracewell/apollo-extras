@@ -40,9 +40,7 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
 
    @Override
    public MalletLDAModel cluster(MStream<Vector> instances) {
-      MalletLDAModel apolloModel = new MalletLDAModel(getEncoderPair(), Similarity.Cosine.asDistanceMeasure());
-      apolloModel.setK(K);
-
+      MalletLDAModel apolloModel = new MalletLDAModel(this, Similarity.Cosine, K);
       apolloModel.pipes = new SerialPipes(Arrays.asList(new TargetStringToFeatures(),
                                                         new VectorToTokensPipe(),
                                                         new TokenSequence2FeatureSequence()));

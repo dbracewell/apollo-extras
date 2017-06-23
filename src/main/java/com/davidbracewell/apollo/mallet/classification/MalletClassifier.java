@@ -1,15 +1,10 @@
 package com.davidbracewell.apollo.mallet.classification;
 
-import cc.mallet.types.Alphabet;
 import cc.mallet.types.Labeling;
 import com.davidbracewell.apollo.linalg.Vector;
-import com.davidbracewell.apollo.mallet.MalletFeatureEncoder;
-import com.davidbracewell.apollo.mallet.MalletLabelEncoder;
-import com.davidbracewell.apollo.ml.EncoderPair;
-import com.davidbracewell.apollo.ml.Instance;
 import com.davidbracewell.apollo.ml.classification.Classification;
 import com.davidbracewell.apollo.ml.classification.Classifier;
-import com.davidbracewell.apollo.ml.preprocess.PreprocessorList;
+import com.davidbracewell.apollo.ml.classification.ClassifierLearner;
 
 /**
  * @author David B. Bracewell
@@ -18,17 +13,10 @@ public class MalletClassifier extends Classifier {
    private static final long serialVersionUID = 1L;
    cc.mallet.classify.Classifier model;
 
-   /**
-    * Instantiates a new Classifier.
-    *
-    * @param targetAlphabet  the target alphabet
-    * @param featureAlphabet the feature alphabet
-    * @param preprocessors   the preprocessors that the classifier will need apply at runtime
-    */
-   protected MalletClassifier(Alphabet targetAlphabet, Alphabet featureAlphabet, PreprocessorList<Instance> preprocessors) {
-      super(new EncoderPair(new MalletLabelEncoder(targetAlphabet), new MalletFeatureEncoder(featureAlphabet)),
-            preprocessors);
+   protected MalletClassifier(ClassifierLearner learner) {
+      super(learner);
    }
+
 
    @Override
    public Classification classify(Vector vector) {

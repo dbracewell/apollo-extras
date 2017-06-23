@@ -6,11 +6,11 @@ import cc.mallet.topics.TopicInferencer;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.InstanceList;
-import com.davidbracewell.apollo.affinity.DistanceMeasure;
+import com.davidbracewell.apollo.affinity.Measure;
 import com.davidbracewell.apollo.linalg.SparseVector;
 import com.davidbracewell.apollo.linalg.Vector;
-import com.davidbracewell.apollo.ml.EncoderPair;
 import com.davidbracewell.apollo.ml.Instance;
+import com.davidbracewell.apollo.ml.clustering.Clusterer;
 import com.davidbracewell.apollo.ml.clustering.topic.TopicModel;
 import com.davidbracewell.collection.counter.Counter;
 import com.davidbracewell.collection.counter.Counters;
@@ -37,15 +37,14 @@ public class MalletLDAModel extends TopicModel {
    SerialPipes pipes;
    private transient TopicInferencer inferencer;
 
-   /**
-    * Instantiates a new Mallet lda model.
-    *
-    * @param encoderPair     the encoder pair
-    * @param distanceMeasure the distance measure
-    */
-   MalletLDAModel(EncoderPair encoderPair, DistanceMeasure distanceMeasure) {
-      super(encoderPair, distanceMeasure);
+   public MalletLDAModel(TopicModel other) {
+      super(other);
    }
+
+   public MalletLDAModel(Clusterer<?> clusterer, Measure measure, int k) {
+      super(clusterer, measure, k);
+   }
+
 
    private TopicInferencer getInferencer() {
       if (inferencer == null) {
@@ -110,7 +109,8 @@ public class MalletLDAModel extends TopicModel {
    @Override
    public double[] softCluster(@NonNull Instance instance) {
       InstanceList instances = new InstanceList(pipes);
-      instances.addThruPipe(new cc.mallet.types.Instance(instance.toVector(getEncoderPair()), "", null, null));
+      instances.addThruPipe(
+         new cc.mallet.types.Instance(getVectorizer().apply(getPreprocessors().apply(instance)), "", null, null));
       return getInferencer().getSampledDistribution(instances.get(0), 800, 5, 100);
    }
 

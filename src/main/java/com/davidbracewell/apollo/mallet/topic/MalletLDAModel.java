@@ -110,7 +110,7 @@ public class MalletLDAModel extends TopicModel {
    public double[] softCluster(@NonNull Instance instance) {
       InstanceList instances = new InstanceList(pipes);
       instances.addThruPipe(
-         new cc.mallet.types.Instance(getVectorizer().apply(getPreprocessors().apply(instance)), "", null, null));
+         new cc.mallet.types.Instance(getPreprocessors().apply(instance).toVector(getEncoderPair()), "", null, null));
       return getInferencer().getSampledDistribution(instances.get(0), 800, 5, 100);
    }
 

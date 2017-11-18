@@ -2,7 +2,7 @@ package com.davidbracewell.apollo.mallet;
 
 import cc.mallet.types.Alphabet;
 import com.davidbracewell.apollo.ml.Example;
-import com.davidbracewell.apollo.ml.LabelEncoder;
+import com.davidbracewell.apollo.ml.encoder.LabelEncoder;
 import com.davidbracewell.apollo.ml.data.Dataset;
 import com.davidbracewell.stream.MStream;
 

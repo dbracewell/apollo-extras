@@ -19,7 +19,7 @@ public abstract class MalletClassifierLearner extends ClassifierLearner {
 
    protected SerialPipes createPipe() {
       return new SerialPipes(Arrays.asList(new Target2Label(),
-                                           new VectorToTokensPipe(),
+                                           new VectorToTokensPipe(getEncoderPair().getFeatureEncoder()),
                                            new TokenSequence2FeatureSequence(),
                                            new FeatureSequence2FeatureVector()));
    }

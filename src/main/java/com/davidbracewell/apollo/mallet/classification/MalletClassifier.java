@@ -1,7 +1,7 @@
 package com.davidbracewell.apollo.mallet.classification;
 
 import cc.mallet.types.Labeling;
-import com.davidbracewell.apollo.linalg.Vector;
+import com.davidbracewell.apollo.linear.NDArray;
 import com.davidbracewell.apollo.ml.classification.Classification;
 import com.davidbracewell.apollo.ml.classification.Classifier;
 import com.davidbracewell.apollo.ml.classification.ClassifierLearner;
@@ -19,7 +19,7 @@ public class MalletClassifier extends Classifier {
 
 
    @Override
-   public Classification classify(Vector vector) {
+   public Classification classify(NDArray vector) {
       Labeling labeling = model.classify(model.getInstancePipe()
                                               .instanceFrom(new cc.mallet.types.Instance(vector, "", null, null)))
                                .getLabeling();

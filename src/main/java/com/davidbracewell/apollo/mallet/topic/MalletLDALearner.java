@@ -7,10 +7,10 @@ import cc.mallet.topics.ParallelTopicModel;
 import cc.mallet.types.Instance;
 import cc.mallet.types.InstanceList;
 import com.davidbracewell.SystemInfo;
-import com.davidbracewell.apollo.affinity.Similarity;
-import com.davidbracewell.apollo.linalg.Vector;
+import com.davidbracewell.apollo.linear.NDArray;
 import com.davidbracewell.apollo.mallet.VectorToTokensPipe;
 import com.davidbracewell.apollo.ml.clustering.Clusterer;
+import com.davidbracewell.apollo.stat.measure.Similarity;
 import com.davidbracewell.guava.common.base.Throwables;
 import com.davidbracewell.stream.MStream;
 import lombok.Getter;
@@ -39,10 +39,10 @@ public class MalletLDALearner extends Clusterer<MalletLDAModel> {
 
 
    @Override
-   public MalletLDAModel cluster(MStream<Vector> instances) {
+   public MalletLDAModel cluster(MStream<NDArray> instances) {
       MalletLDAModel apolloModel = new MalletLDAModel(this, Similarity.Cosine, K);
       apolloModel.pipes = new SerialPipes(Arrays.asList(new TargetStringToFeatures(),
-                                                        new VectorToTokensPipe(),
+                                                        new VectorToTokensPipe(apolloModel.getFeatureEncoder()),
                                                         new TokenSequence2FeatureSequence()));
       InstanceList trainingData = new InstanceList(apolloModel.pipes);
       instances.filter(i -> i.size() > 0)

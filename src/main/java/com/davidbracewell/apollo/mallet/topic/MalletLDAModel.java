@@ -6,12 +6,12 @@ import cc.mallet.topics.TopicInferencer;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.InstanceList;
-import com.davidbracewell.apollo.affinity.Measure;
-import com.davidbracewell.apollo.linalg.SparseVector;
-import com.davidbracewell.apollo.linalg.Vector;
+import com.davidbracewell.apollo.linear.NDArray;
+import com.davidbracewell.apollo.linear.NDArrayFactory;
 import com.davidbracewell.apollo.ml.Instance;
 import com.davidbracewell.apollo.ml.clustering.Clusterer;
 import com.davidbracewell.apollo.ml.clustering.topic.TopicModel;
+import com.davidbracewell.apollo.stat.measure.Measure;
 import com.davidbracewell.collection.counter.Counter;
 import com.davidbracewell.collection.counter.Counters;
 import lombok.NonNull;
@@ -84,9 +84,9 @@ public class MalletLDAModel extends TopicModel {
    }
 
    @Override
-   public Vector getTopicVector(int topic) {
+   public NDArray getTopicVector(int topic) {
       Counter<String> topicCtr = getTopicWords(topic);
-      Vector v = SparseVector.zeros(getFeatureEncoder().size());
+      NDArray v = NDArrayFactory.DEFAULT().zeros(getFeatureEncoder().size());
       topicCtr.entries().forEach(e -> v.set(getFeatureEncoder().index(e.getKey()), e.getValue()));
       return v;
    }

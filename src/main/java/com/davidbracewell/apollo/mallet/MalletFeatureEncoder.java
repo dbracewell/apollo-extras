@@ -1,9 +1,9 @@
 package com.davidbracewell.apollo.mallet;
 
 import cc.mallet.types.Alphabet;
-import com.davidbracewell.apollo.ml.Encoder;
 import com.davidbracewell.apollo.ml.Example;
 import com.davidbracewell.apollo.ml.data.Dataset;
+import com.davidbracewell.apollo.ml.encoder.Encoder;
 import com.davidbracewell.stream.MStream;
 
 import java.io.Serializable;

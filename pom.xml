@@ -26,7 +26,7 @@
     <version>0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description/>
+    <description>A machine learning library for Java.</description>
     <url>https://github.com/dbracewell/davidbracewell-common</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
